@@ -1,56 +1,31 @@
 # US-Real-Estate-Project
 Real
 import pandas as pd
-
-# Load the dataset
 df = pd.read_csv('USRealEstateTrends.csv')
 
-# Display the first few rows of the dataset
+
 print(df.head())
 
-# Drop rows with missing values
 df_cleaned = df.dropna()
-
-# Alternatively, fill missing values with a specific value (e.g., 0)
-# df_cleaned = df.fillna(0)
-
-# Fill missing values with the mean of the column
-# df_cleaned = df.fillna(df.mean())
-
-# Convert column names to lowercase
 df_cleaned.columns = [col.lower() for col in df_cleaned.columns]
-
-# Remove duplicates
 df_cleaned = df_cleaned.drop_duplicates()
 
-# Display summary statistics
 print(df_cleaned.describe())
 
-# Save the 
 df_cleaned.to_csv('USRealEstateTrends_cleaned.csv', index=False)
 
-# Display the first few rows of the dataset
 print(df.head())
 
-# Drop rows with missing values (NaNs)
 df_cleaned = df.dropna()
 
-# Alternatively, fill missing values with a specific value (e.g., 0)
-# df_cleaned = df.fillna(0)
-
-# Fill missing values with the mean of the respective columns
 df_cleaned = df.fillna(df.mean())
 
-# Convert column names to lowercase and replace spaces with underscores
 df_cleaned.columns = [col.lower().replace(' ', '_') for col in df_cleaned.columns]
 
-# Remove duplicates
 df_cleaned = df_cleaned.drop_duplicates()
 
-# Display summary statistics to ensure data is cleaned
 print(df_cleaned.describe())
 
-# Save the cleaned dataset to a new CSV file
 df_cleaned.to_csv('USRealEstateTrends_cleaned.csv', index=False)
     RegionID  SizeRank       RegionName StateName  2000-02-HomeValue  \
 0    102001         0    United States       NaN      123048.375901   
@@ -125,40 +100,30 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Load the dataset
-df = pd.read_csv('USRealEstateTrends.csv')
 
-# Drop rows with missing values (NaNs)
 df_cleaned = df.dropna()
 
-# Alternatively, fill missing values with the mean of the respective columns
 df_cleaned = df.fillna(df.mean(numeric_only=True))
 
-# Melt the dataframe to have a single column for home values
 value_columns = [col for col in df_cleaned.columns if 'HomeValue' in col]
 df_melted = df_cleaned.melt(id_vars=['RegionID', 'SizeRank', 'RegionName', 'StateName'], 
                             value_vars=value_columns, 
                             var_name='Date', 
                             value_name='HomeValue')
 
-# Calculate statistics
-min_value = df_melted['HomeValue'].min()
+]min_value = df_melted['HomeValue'].min()
 max_value = df_melted['HomeValue'].max()
 mean_value = df_melted['HomeValue'].mean()
 
-# Plot histogram
 plt.figure(figsize=(10, 6))
 n, bins, patches = plt.hist(df_melted['HomeValue'], bins=50, edgecolor='black')
 
-# Normalize the data to 0-1 for the gradient coloring
 bin_centers = 0.5 * (bins[:-1] + bins[1:])
 col = bin_centers - min(bin_centers)
 col /= max(col)
 
-# Use a color map
 cm = plt.cm.get_cmap('viridis')
 
-# Color the patches
 for c, p in zip(col, patches):
     plt.setp(p, 'facecolor', cm(c))
 
@@ -172,12 +137,10 @@ plt.text(min_value, max(n), f'Min: {min_value:.2f}', color='red', fontsize=12)
 plt.text(max_value, max(n), f'Max: {max_value:.2f}', color='green', fontsize=12)
 plt.text(mean_value, max(n), f'Mean: {mean_value:.2f}', color='blue', fontsize=12)
 
-# Labels and title
 plt.xlabel('Home Value')
 plt.ylabel('Frequency')
 plt.title('Distribution of Home Values with Gradient Coloring')
 
-# Show plot
 plt.show()
 
 
