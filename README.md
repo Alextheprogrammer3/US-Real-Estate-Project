@@ -385,7 +385,46 @@ The dataset `USRealEstateTrends.csv` contains historical data on home values acr
 
 ![download](https://github.com/user-attachments/assets/64c85619-661e-4003-9e30-758b51377eb6)
 
-11. **Heatmap of Home Prices by State and Month:**
+11. **Average Home Values by State with Gradient Color Bar:**
+   - Created a bar graph with a gradient color to represent average home values by state.
+   - Commands:
+     ```python
+     import pandas as pd
+     import matplotlib.pyplot as plt
+     data = {'RegionID': [102001, 394913, 753899, 394463, 394514],
+    'RegionName': ['United States', 'New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Dallas, TX'],
+    'StateName': [None, 'NY', 'CA', 'IL', 'TX'],
+    '2000-02-HomeValue': [123048.375901, 217413.348751, 230191.681333, 154332.573521, 128259.611168],
+    '2000-03-HomeValue': [123316.373392, 218341.844065, 231328.440994, 154604.414602, 128325.255585],
+    '2000-04-HomeValue': [123891.175404, 220223.334853, 233590.210855, 155280.687654, 128495.727241],
+    '2000-05-HomeValue': [124552.703606, 222171.683720, 236063.878014, 156094.162793, 128720.489451],
+    '2000-06-HomeValue': [125261.950998, 224331.715643, 238520.221749, 157007.101990, 128947.995217],
+    '2024-05-HomeValue': [360681.294250, 657279.223513, 962388.491425, 321897.252361, 381103.625851],
+    'Date': ['2000-02', '2000-03', '2000-04', '2000-05', '2000-06']
+    }
+    df = pd.DataFrame(data)
+    dates = ['2000-02', '2000-03', '2000-04', '2000-05', '2000-06']
+    home_values = [
+    [123048.375901, 123316.373392, 123891.175404, 124552.703606, 125261.950998],  # United States
+    [217413.348751, 218341.844065, 220223.334853, 222171.683720, 224331.715643],  # New York, NY
+    [230191.681333, 231328.440994, 233590.210855, 236063.878014, 238520.221749],  # Los Angeles, CA
+    [154332.573521, 154604.414602, 155280.687654, 156094.162793, 157007.101990],  # Chicago, IL
+    [128259.611168, 128325.255585, 128495.727241, 128720.489451, 128947.995217]   # Dallas, TX
+    ]
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for i, region in enumerate(df['RegionName']):
+    ax.plot(dates, home_values[i], marker='o', label=region)
+    ax.set_title('Home Prices Over Time for Selected Regions')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Home Price')
+    ax.legend(title='Region')
+    plt.grid(True)
+    plt.show()
+     ```
+
+![download](https://github.com/user-attachments/assets/63c29ebe-d55b-494f-b25a-6bdbbba178dd)
+
+12. **Heatmap of Home Prices by State and Month:**
     - Created a heatmap to visualize home prices across states and months.
     - Commands:
       ```python
@@ -395,8 +434,7 @@ The dataset `USRealEstateTrends.csv` contains historical data on home values acr
       from matplotlib.widgets import Cursor
 
       # Sample Data
-      data = {
-          'State': ['CA', 'NY', 'FL', 'TX', 'PA', 'IL', 'OH', 'MI', 'GA', 'NC',
+      data = { 'State': ['CA', 'NY', 'FL', 'TX', 'PA', 'IL', 'OH', 'MI', 'GA', 'NC',
                     'NJ', 'VA', 'WA', 'AZ', 'MA', 'MO', 'MD', 'IN', 'TN', 'WI'],
           '2000-02': [230191.68, 217413.35, 180000.00, 128259.61, 140000.00, 155000.00, 145000.00, 150000.00, 135000.00, 120000.00,
                       160000.00, 165000.00, 175000.00, 185000.00, 190000.00, 150000.00, 155000.00, 165000.00, 170000.00, 155000.00],
@@ -458,5 +496,37 @@ The dataset `USRealEstateTrends.csv` contains historical data on home values acr
       plt.show()
       ```
       ![download](https://github.com/user-attachments/assets/420a311f-c658-4a5c-993f-581b6d6e7701)
+
+
+     ## Results
+
+- **Overview**: This project explores the US real estate trends from February 2000 to May 2024, providing a detailed analysis of home price fluctuations over more than two decades. By analyzing historical data and projecting future trends, we gain valuable insights into the evolving real estate market.
+
+- **Data Coverage**:
+  - **Timeframe**: The dataset spans from February 2000 to May 2024, capturing over 24 years of real estate data. This extensive period allows us to analyze long-term trends and seasonal variations in home prices.
+  - **Future Projections**: Projections extend to 2034, offering a glimpse into potential future trends based on historical patterns. This forward-looking analysis helps in anticipating market shifts and planning for future investments.
+
+- **Home Prices Over Time: East Coast vs. West Coast**:
+  - **Trend Analysis**: The stacked bar chart illustrates the trajectory of home prices on the East Coast and West Coast from February 2000 to May 2024. 
+    - **East Coast**: Prices started at approximately $154,000 in February 2000 and increased steadily to around $200,000 by May 2024. This gradual growth reflects a stable but consistent rise in home values.
+    - **West Coast**: Home prices on the West Coast began at about $230,000 and surged to approximately $320,000. This steep increase indicates a stronger upward trend, with prices rising more rapidly compared to the East Coast.
+  - **Comparison**: The West Coast, particularly California, consistently shows higher home prices than the East Coast. This suggests a significant premium on West Coast real estate, driven by higher demand and cost of living.
+
+- **Top 10 Regions with the Highest Average Home Values**:
+  - **Marimekko Chart Insights**: The Marimekko chart highlights the top 10 regions with the highest average home values.
+    - **California Dominance**: California regions dominate the chart, reinforcing the state's position as having the highest average home values in the country.
+    - **Regional Disparities**: The chart also reveals notable differences between regions, with certain areas showing disproportionately high home values relative to their size rank. This disparity underscores the concentration of high-value properties in specific regions.
+
+- **Home Prices Heatmap by State and Month**:
+  - **Heatmap Insights**: The heatmap provides a comprehensive view of home price variations across states and months, using color intensity to represent price levels.
+    - **Seasonal Fluctuations**: The heatmap shows seasonal trends in home prices, with some states experiencing more pronounced seasonal variations than others. For instance, certain regions may see price spikes during summer months.
+    - **Regional Trends**: The visualization confirms that California has the highest home prices across the board. States like New York and Massachusetts also show high price levels, though not as pronounced as California.
+    - **Price Volatility**: Some states exhibit higher price volatility, which could be due to local economic factors or market conditions affecting home values more drastically.
+
+- **Relevance**:
+  - **Historical Context**: The dataset provides a historical perspective on real estate trends, allowing for a nuanced understanding of how market conditions have evolved.
+  - **Future Implications**: Projections extending to 2034 offer a forward-looking view that helps stakeholders anticipate future market conditions. This forward view is crucial for strategic planning and investment decisions.
+
+These insights illustrate the dynamic nature of the US real estate market, highlighting regional differences, trends over time, and projections for the future.
 
 
