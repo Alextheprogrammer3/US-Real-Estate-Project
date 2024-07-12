@@ -1,148 +1,115 @@
-# US-Real-Estate-Project
-Real
-import pandas as pd
-df = pd.read_csv('USRealEstateTrends.csv')
+# US Real Estate Trends Analysis
 
+## Project Overview
 
-print(df.head())
+This project involves analyzing a dataset of real estate trends across the United States from the year 2000 to 2024. The goal was to clean, transform, and visualize the data to uncover insights into home value trends over time.
 
-df_cleaned = df.dropna()
-df_cleaned.columns = [col.lower() for col in df_cleaned.columns]
-df_cleaned = df_cleaned.drop_duplicates()
+## Table of Contents
 
-print(df_cleaned.describe())
+- [Project Overview](#project-overview)
+- [Data Description](#data-description)
+- [Methods and Approach](#methods-and-approach)
+- [Data Cleaning and Transformation](#data-cleaning-and-transformation)
+- [Data Analysis and Visualization](#data-analysis-and-visualization)
+- [Results](#results)
+- [Technologies Used](#technologies-used)
+- [How to Run the Code](#how-to-run-the-code)
+- [License](#license)
 
-df_cleaned.to_csv('USRealEstateTrends_cleaned.csv', index=False)
+## Data Description
 
-print(df.head())
+The dataset `USRealEstateTrends.csv` contains historical data on home values across various regions in the United States from 2000 to 2024. The dataset includes the following columns:
 
-df_cleaned = df.dropna()
+- `RegionID`: Unique identifier for the region
+- `SizeRank`: Rank of the region by size
+- `RegionName`: Name of the region
+- `StateName`: State abbreviation
+- `2000-02-HomeValue` to `2024-05-HomeValue`: Monthly home values from February 2000 to May 2024
+- `2024-03-DaysPending`: Number of days pending for the property in March 2024
+- `2024-03-CutRaw`: Raw data cut value for March 2024
 
-df_cleaned = df.fillna(df.mean())
+## Methods and Approach
 
-df_cleaned.columns = [col.lower().replace(' ', '_') for col in df_cleaned.columns]
+1. **Data Loading and Initial Exploration:**
+   - Loaded the dataset and examined the first few rows to understand its structure and identify issues.
+   - Command:
+     ```python
+     import pandas as pd
+     df = pd.read_csv('USRealEstateTrends.csv')
+     print(df.head())
+     ```
 
-df_cleaned = df_cleaned.drop_duplicates()
+2. **Data Cleaning:**
+   - Removed rows with missing values and duplicated entries.
+   - Standardized column names for consistency.
+   - Saved the cleaned data to a new CSV file.
+   - Commands:
+     ```python
+     df_cleaned = df.dropna()
+     df_cleaned.columns = [col.lower() for col in df_cleaned.columns]
+     df_cleaned = df_cleaned.drop_duplicates()
+     df_cleaned.to_csv('USRealEstateTrends_cleaned.csv', index=False)
+     ```
 
-print(df_cleaned.describe())
+3. **Further Data Cleaning:**
+   - Filled remaining missing values with the mean of the columns.
+   - Replaced spaces in column names with underscores.
+   - Commands:
+     ```python
+     df_cleaned = df.dropna()
+     df_cleaned = df.fillna(df.mean())
+     df_cleaned.columns = [col.lower().replace(' ', '_') for col in df_cleaned.columns]
+     df_cleaned = df_cleaned.drop_duplicates()
+     df_cleaned.to_csv('USRealEstateTrends_cleaned.csv', index=False)
+     ```
 
-df_cleaned.to_csv('USRealEstateTrends_cleaned.csv', index=False)
-    RegionID  SizeRank       RegionName StateName  2000-02-HomeValue  \
-0    102001         0    United States       NaN      123048.375901   
-1    394913         1     New York, NY        NY      217413.348751   
-2    753899         2  Los Angeles, CA        CA      230191.681333   
-3    394463         3      Chicago, IL        IL      154332.573521   
-4    394514         4       Dallas, TX        TX      128259.611168   
+4. **Data Transformation:**
+   - Reshaped the data from wide to long format for analysis.
+   - Commands:
+     ```python
+     value_columns = [col for col in df_cleaned.columns if 'HomeValue' in col]
+     df_melted = df_cleaned.melt(id_vars=['regionid', 'sizerank', 'regionname', 'statename'], 
+                                 value_vars=value_columns, 
+                                 var_name='date', 
+                                 value_name='homevalue')
+     ```
 
-   2000-03-HomeValue  2000-04-HomeValue  2000-05-HomeValue  2000-06-HomeValue  \
-0      123316.373392      123891.175404      124552.703606      125261.950998   
-1      218341.844065      220223.334853      222171.683720      224331.715643   
-2      231328.440994      233590.210855      236063.878014      238520.221749   
-3      154604.414602      155280.687654      156094.162793      157007.101990   
-4      128325.255585      128495.727241      128720.489451      128947.995217   
-
-   2000-07-HomeValue  ...  2024-02-CutRaw  2024-03-HomeValue  \
-0      126013.182906  ...         10000.0      357374.362080   
-1      226691.604401  ...         25000.0      646508.747102   
-2      241038.221287  ...         30000.5      952665.578913   
-3      157978.803091  ...         10000.0      316875.294320   
-4      129186.531899  ...         10000.0      379972.349667   
-
-   2024-03-DaysPending  2024-03-CutRaw  2024-04-HomeValue  \
-0                 42.0         10000.0      359240.114070   
-1                 55.0         25000.0      652619.099940   
-2                 32.0         34000.0      956266.687926   
-3                 29.0         10000.0      319764.144323   
-4                 42.0         10000.0      380957.392395   
-
-   2024-04-DaysPending  2024-04-CutRaw  2024-05-HomeValue  \
-0                 38.0         10000.0      360681.294250   
-1                 51.0         26000.0      657279.223513   
-2                 29.0         40012.0      962388.491425   
-3                 25.0         10000.0      321897.252361   
-4                 38.0         10000.0      381103.625851   
-
-   2024-05-DaysPending  2024-05-CutRaw  
-0                 37.0         10000.0  
-1                 47.0         30000.0  
-2                 28.0         40000.0  
-3                 23.0         10000.0  
-4                 38.0         10000.0  
-
-[5 rows x 450 columns]
-<ipython-input-2-339e1d13d82a>:16: FutureWarning: The default value of numeric_only in DataFrame.mean is deprecated. In a future version, it will default to False. In addition, specifying 'numeric_only=None' is deprecated. Select only valid columns or specify the value of numeric_only to silence this warning.
-  df_cleaned = df.fillna(df.mean())
-            regionid    sizerank  2000-02-homevalue  2000-03-homevalue  \
-count     895.000000  895.000000         895.000000         895.000000   
-mean   412099.672626  461.751955      109823.132178      109978.654801   
-std     78377.355083  268.710532       33623.325119       33799.783441   
-min    102001.000000    0.000000       24508.884229       24496.582232   
-25%    394546.000000  230.500000      100241.757887      100015.977962   
-50%    394795.000000  460.000000      109823.132178      109978.654801   
-75%    395044.500000  689.500000      109823.132178      109978.654801   
-max    753929.000000  939.000000      388736.507581      391739.288868   
-
-       2000-04-homevalue  2000-05-homevalue  2000-06-homevalue  \
-count         895.000000         895.000000         895.000000   
-mean       110669.025722      111418.259858      111992.900574   
-std         34343.743085       34858.616321       35347.024815   
-min         24470.277297       24457.747178       24455.818269   
-25%        100452.120723      101040.619762      101126.135014   
-50%        110669.025722      111418.259858      111992.900574   
-75%        110669.025722      111418.259858      111992.900574   
-max        399871.036264      408396.675198      418165.004118   
-
-       2000-07-homevalue  2000-08-homevalue  2000-09-homevalue  ...  \
-count         895.000000         895.000000         895.000000  ...   
-mean       112763.427730      113389.379398      114077.797909  ...   
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-
-
-df_cleaned = df.dropna()
-
-df_cleaned = df.fillna(df.mean(numeric_only=True))
-
-value_columns = [col for col in df_cleaned.columns if 'HomeValue' in col]
-df_melted = df_cleaned.melt(id_vars=['RegionID', 'SizeRank', 'RegionName', 'StateName'], 
-                            value_vars=value_columns, 
-                            var_name='Date', 
-                            value_name='HomeValue')
-
-]min_value = df_melted['HomeValue'].min()
-max_value = df_melted['HomeValue'].max()
-mean_value = df_melted['HomeValue'].mean()
-
-plt.figure(figsize=(10, 6))
-n, bins, patches = plt.hist(df_melted['HomeValue'], bins=50, edgecolor='black')
-
-bin_centers = 0.5 * (bins[:-1] + bins[1:])
-col = bin_centers - min(bin_centers)
-col /= max(col)
-
-cm = plt.cm.get_cmap('viridis')
-
-for c, p in zip(col, patches):
-    plt.setp(p, 'facecolor', cm(c))
-
-# Plot statistics lines
-plt.axvline(min_value, color='red', linestyle='dashed', linewidth=1)
-plt.axvline(max_value, color='green', linestyle='dashed', linewidth=1)
-plt.axvline(mean_value, color='blue', linestyle='dashed', linewidth=1)
-
-# Add text annotations for the statistics
-plt.text(min_value, max(n), f'Min: {min_value:.2f}', color='red', fontsize=12)
-plt.text(max_value, max(n), f'Max: {max_value:.2f}', color='green', fontsize=12)
-plt.text(mean_value, max(n), f'Mean: {mean_value:.2f}', color='blue', fontsize=12)
-
-plt.xlabel('Home Value')
-plt.ylabel('Frequency')
-plt.title('Distribution of Home Values with Gradient Coloring')
-
-plt.show()
-
+5. **Data Analysis and Visualization:**
+   - Analyzed the distribution of home values and created a histogram with gradient coloring.
+   - Commands:
+     ```python
+     import matplotlib.pyplot as plt
+     
+     min_value = df_melted['homevalue'].min()
+     max_value = df_melted['homevalue'].max()
+     mean_value = df_melted['homevalue'].mean()
+     
+     plt.figure(figsize=(10, 6))
+     n, bins, patches = plt.hist(df_melted['homevalue'], bins=50, edgecolor='black')
+     
+     bin_centers = 0.5 * (bins[:-1] + bins[1:])
+     col = bin_centers - min(bin_centers)
+     col /= max(col)
+     
+     cm = plt.cm.get_cmap('viridis')
+     
+     for c, p in zip(col, patches):
+         plt.setp(p, 'facecolor', cm(c))
+     
+     plt.axvline(min_value, color='red', linestyle='dashed', linewidth=1)
+     plt.axvline(max_value, color='green', linestyle='dashed', linewidth=1)
+     plt.axvline(mean_value, color='blue', linestyle='dashed', linewidth=1)
+     
+     plt.text(min_value, max(n), f'Min: {min_value:.2f}', color='red', fontsize=12)
+     plt.text(max_value, max(n), f'Max: {max_value:.2f}', color='green', fontsize=12)
+     plt.text(mean_value, max(n), f'Mean: {mean_value:.2f}', color='blue', fontsize=12)
+     
+     plt.xlabel('Home Value')
+     plt.ylabel('Frequency')
+     plt.title('Distribution of Home Values with Gradient Coloring')
+     
+     plt.show()
+     ```
 
 ![download](https://github.com/user-attachments/assets/ff3307c5-4dcd-448d-8776-5ebc0b38b3b3)
 
