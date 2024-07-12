@@ -235,8 +235,8 @@ The dataset `USRealEstateTrends.csv` contains historical data on home values acr
      plt.tight_layout()
      plt.show()
      ```
+![download](https://github.com/user-attachments/assets/4aee5737-ad5b-4a02-92c3-12d14ee4aec1)
 
-   ![Top 10 NYC Regions by Average Home Value](https://github.com/user-attachments/assets/31e6f430-b058-42e7-8b0c-df37ecf1461b)
 
 ## Results
 
